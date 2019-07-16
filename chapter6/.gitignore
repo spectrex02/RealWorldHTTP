@@ -1,0 +1,8 @@
+ca.crt
+ca.csr
+ca.key
+ca.srl
+openssl.cnf
+server.crt
+server.csr
+server.key
