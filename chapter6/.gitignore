@@ -6,3 +6,6 @@ openssl.cnf
 server.crt
 server.csr
 server.key
+client.key
+client.csr
+client.crt

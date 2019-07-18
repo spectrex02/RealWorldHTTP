@@ -133,6 +133,20 @@ func handlerUpgrade(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handlerChunkedResponse(w http.ResponseWriter, r *http.Request) {
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		panic("expected http.ResponseWriter to be an http.Flusher")
+	}
+	for i := 1; i <= 10; i++ {
+		fmt.Fprintf(w, "Chunk #%d\n", i)
+		flusher.Flush()
+		time.Sleep(500 * time.Millisecond)
+	}
+	flusher.Flush()
+	// fmt.Fprintf(w, "<html><body>hello world</body></html>")
+}
+
 //echo server
 func main() {
 	var httpServer http.Server
@@ -141,6 +155,7 @@ func main() {
 	http.HandleFunc("/digest", handlerDigest)
 	http.HandleFunc("/img", thubmnailHndler)
 	http.HandleFunc("/upgrade", handlerUpgrade)
+	http.HandleFunc("/chunked", handlerChunkedResponse)
 	log.Printf("start http listening:18888")
 	httpServer.Addr = ":18888"
 	log.Println(httpServer.ListenAndServe())
